@@ -141,6 +141,12 @@
     .sc-monitor-row-value-editing .sc-monitor-row-value-outer {
       background-color: #e25b27;
     }
+    #fullscreenBtn {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: 50px;
+}
     
   </style>
   <meta name="theme-color" content="#000000">
@@ -148,6 +154,8 @@
 </head>
 <body>
   <div id="app"></div>
+  
+  <button id="fullscreenBtn">Go Fullscreen</button>
 
   <div id="launch" class="screen" hidden title="Click to start">
     <div class="green-flag">
@@ -173,6 +181,7 @@
       <p id="error-stack"></p>
     </details>
   </div>
+  
 
   <script src="script.js"></script>
   <script>
@@ -359,6 +368,32 @@
       }
     };
     run().catch(handleError);
+    
+    var fullscreenBtn = document.getElementById("fullscreenBtn");
+
+fullscreenBtn.addEventListener("click", function() {
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (isIOS) {
+    // Use viewport meta tag for iOS devices
+    var viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0");
+  } else {
+    // Use Fullscreen API for desktop and other devices
+    var element = document.documentElement;
+
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+  }
+});
+
   </script>
 </body>
 </html>
